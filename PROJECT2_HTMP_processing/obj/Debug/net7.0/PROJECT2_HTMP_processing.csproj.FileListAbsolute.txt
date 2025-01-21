@@ -13,3 +13,5 @@ C:\Users\user1\Desktop\תכנות\Dot net\פרויקטים בפרקטיקוד\פ
 C:\Users\user1\Desktop\תכנות\Dot net\פרויקטים בפרקטיקוד\פרויקט שני\PROJECT2_HTMP_processing\PROJECT2_HTMP_processing\obj\Debug\net7.0\PROJECT2_HTMP_processing.pdb
 C:\Users\user1\Desktop\תכנות\Dot net\פרויקטים בפרקטיקוד\פרויקט שני\PROJECT2_HTMP_processing\PROJECT2_HTMP_processing\obj\Debug\net7.0\PROJECT2_HTMP_processing.genruntimeconfig.cache
 C:\Users\user1\Desktop\תכנות\Dot net\פרויקטים בפרקטיקוד\פרויקט שני\PROJECT2_HTMP_processing\PROJECT2_HTMP_processing\obj\Debug\net7.0\ref\PROJECT2_HTMP_processing.dll
+C:\Users\user1\Desktop\תכנות\Dot net\פרויקטים בפרקטיקוד\פרויקט שני\PROJECT2_HTMP_processing\PROJECT2_HTMP_processing\bin\Debug\net7.0\Files\HtmlTags.json
+C:\Users\user1\Desktop\תכנות\Dot net\פרויקטים בפרקטיקוד\פרויקט שני\PROJECT2_HTMP_processing\PROJECT2_HTMP_processing\bin\Debug\net7.0\Files\HTMLVoidTag.json

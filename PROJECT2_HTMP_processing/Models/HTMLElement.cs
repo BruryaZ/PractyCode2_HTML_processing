@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PROJECT2_HTMP_processing
+namespace PROJECT2_HTMP_processing.Entities
 {
     public class HTMLElement
     {
