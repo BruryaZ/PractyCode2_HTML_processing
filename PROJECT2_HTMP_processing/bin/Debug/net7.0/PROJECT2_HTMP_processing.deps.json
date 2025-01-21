@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "PROJECT2_HTMP_processing/1.0.0": {
+        "runtime": {
+          "PROJECT2_HTMP_processing.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PROJECT2_HTMP_processing/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
