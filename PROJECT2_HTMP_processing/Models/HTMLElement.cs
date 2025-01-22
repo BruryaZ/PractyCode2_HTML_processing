@@ -18,14 +18,24 @@ namespace PROJECT2_HTMP_processing.Entities
         public HTMLElement Parent { get; set; }
         public HTMLElement()
         {
+            Atributes = new List<string>();
+            Classes = new List<string>();
         }
-
-        public HTMLElement(string id, string name, List<string> atributes, List<string> classes, string innerHTML, HTMLElement child, HTMLElement parent)
+        public override string ToString()
+        {
+            string elem = $"Id: " + Id + " Name: " + Name + " Atributes: ";
+            //foreach (var at in Atributes)
+            //    elem += at + ", ";
+            //elem += " Classes: ";
+            //foreach (var cl in Classes)
+            //    elem += cl + ", ";
+            //elem += " InnerHTML: " + InnerHTML;
+            return elem;
+        }
+        public HTMLElement(string id, string name, string innerHTML, HTMLElement child, HTMLElement parent):base()
         {
             Id = id;
             Name = name;
-            Atributes = atributes;
-            Classes = classes;
             InnerHTML = innerHTML;
             Child = child;
             Parent = parent;

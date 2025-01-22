@@ -9,15 +9,25 @@ namespace PROJECT2_HTMP_processing.Models
 {
     public class HTMLHelper
     {
-        private readonly List<string> _HTMLTags = new List<string>();
-        private readonly List<string> _HTMLTagsVoid = new List<string>();
+        private static readonly HTMLHelper instance = new HTMLHelper();
+        private static List<string> _HTMLTags = JsonSerializer.Deserialize<List<string>>(File.ReadAllText("Files/HTMLTags.json"));
+        private static List<string> _HTMLTagsVoid = JsonSerializer.Deserialize<List<string>>(File.ReadAllText("Files/HTMLVoidTag.json"));
 
-        public List<string> HTMLTags => _HTMLTags;
-        public List<string> HTMLTagsVoid => _HTMLTagsVoid;
-        public HTMLHelper()
+        public static HTMLHelper Instance => instance;
+        public static List<string> HTMLTags => _HTMLTags;
+        public static List<string> HTMLTagsVoid => _HTMLTagsVoid;
+
+        private HTMLHelper()
         {
-            _HTMLTags = JsonSerializer.Deserialize<List<string>>(File.ReadAllText("Files/HTMLTags.json"));
-            _HTMLTagsVoid = JsonSerializer.Deserialize<List<string>>(File.ReadAllText("Files/HTMLVoidTag.json"));
+            try
+            {
+                _HTMLTags = JsonSerializer.Deserialize<List<string>>(File.ReadAllText("Files/HTMLTags.json"));
+                _HTMLTagsVoid = JsonSerializer.Deserialize<List<string>>(File.ReadAllText("Files/HTMLVoidTag.json"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading files: {ex.Message}");
+            }
         }
     }
 }
