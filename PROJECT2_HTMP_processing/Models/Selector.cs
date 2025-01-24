@@ -14,14 +14,14 @@ namespace PROJECT2_HTMP_processing.Models
         public List<string> Classes { get; set; }
         public Selector Parent { get; set; }
         public Selector Child { get; set; }
-        public Selector() 
+        public Selector()
         {
-            this.Classes = new List<string>(); 
+            this.Classes = new List<string>();
             this.Parent = null;
             this.Child = null;
         }
 
-        public Selector(string tagName, string id, List<string> classes):base() 
+        public Selector(string tagName, string id, List<string> classes) : base()
         {
             TagName = tagName;
             Id = id;
@@ -30,8 +30,8 @@ namespace PROJECT2_HTMP_processing.Models
 
         public static Selector QueryToSelector(string query)
         {
-            Selector root = new Selector(), tmp = null , current = root;
-            List<string> conditions ;
+            Selector root = new Selector(), tmp = null, current = root;
+            List<string> conditions;
             string[] separateQuery = query.Split(' ');
 
             foreach (string s in separateQuery)
@@ -47,15 +47,14 @@ namespace PROJECT2_HTMP_processing.Models
                     }
                     else if (s2.StartsWith("#"))
                     {
-                        tmp.Id = s2.Substring(1); 
+                        tmp.Id = s2.Substring(1);
                     }
                     else if (s2.StartsWith("."))
                     {
-                        tmp.Classes.Add(s2.Substring(1)); 
+                        tmp.Classes.Add(s2.Substring(1));
                     }
                 }
             }
-            // check parent and child
             current.Child = tmp;
             tmp.Parent = current;
             current = current.Child;
@@ -83,6 +82,13 @@ namespace PROJECT2_HTMP_processing.Models
             }
 
             return result;
+        }
+        public override string ToString()
+        {
+            string res = $"TagName: {TagName} Id: {Id} Parent: Classes: ";
+            Classes.ForEach(c => res += c + ", ");
+            res += $"{Parent.TagName} Child: {Child.TagName}";
+            return res;
         }
     }
 }

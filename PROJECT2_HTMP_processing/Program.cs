@@ -14,7 +14,8 @@ static async Task<string> Load(string url)
 }
 
 //var html = await Load("https://learn.malkabruk.co.il/practicode");
-var html = await Load("https://learn.malkabruk.co.il/practicode");
+//var html = await Load("https://www.youtube.com/watch?v=KqAF4TCEXbI");
+var html = await Load("https://forum.netfree.link/category/1/%D7%94%D7%9B%D7%A8%D7%96%D7%95%D7%AA");
 
 // filter the spaces
 var cleanHTML = new Regex("\\s").Replace(html, " ");
@@ -88,15 +89,6 @@ static string GetFirstWord(string str)
     // החזרת המילה הראשונה
     return words.Length > 0 ? words[0] : string.Empty;
 }
-static string RemoveFirstWord(string str)
-{
-    // פיצול המחרוזת לרשימה של מילים
-    string[] words = str.Split(' ');
-
-    // אם יש יותר ממילה אחת, מחזירים את המילים מלבד הראשונה
-    return words.Length > 1 ? string.Join(" ", words, 1, words.Length - 1) : string.Empty;
-}
-
 static HTMLElement FullFields(string HTMLline, HTMLElement element)
 {
     var matches = new Regex("([^\\s]*?)=\"(.*?)\"").Matches(HTMLline);
@@ -168,4 +160,14 @@ void PrintHtmlAsDocument(HTMLElement element, int depth = 0)
         // סגירת התגית
         Console.WriteLine($"{indentation}</{element.Name}>");
     }
+}
+
+// פירוק השאילתא לא עובדת טוב
+var selector = Selector.QueryToSelector("head title");
+var results = new HashSet<HTMLElement>();
+var foundElements = root.FindElements(selector, root, results);
+Console.WriteLine("resaults: ");
+foreach (var element in foundElements)
+{
+    Console.WriteLine(element.ToString());
 }

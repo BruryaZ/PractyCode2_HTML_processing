@@ -1,4 +1,5 @@
-﻿using PROJECT2_HTMP_processing.Models;
+﻿using PROJECT2_HTMP_processing.Entities;
+using PROJECT2_HTMP_processing.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace PROJECT2_HTMP_processing.Entities
             InnerHTML = innerHTML;
         }
 
-        public IEnumerable<HTMLElement> FlatList()
+        public IEnumerable<HTMLElement> Descendants()
         {
             Queue<HTMLElement> queue = new Queue<HTMLElement>();
             queue.Enqueue(this);
@@ -60,5 +61,55 @@ namespace PROJECT2_HTMP_processing.Entities
                 }
             }
         }
+
+        public IEnumerable<HTMLElement> Ancestors()
+        {
+            HTMLElement tmp = this;
+            while (tmp.Parent != null)
+            {
+                tmp = tmp.Parent;
+                yield return tmp;
+            }
+        }
+
+        public List<HTMLElement> FindElements(Selector element, HTMLElement current, HashSet<HTMLElement> resaults)
+        {
+            var descendants = current.Descendants().ToList();
+            foreach (var des in descendants)
+            {
+                if(element == null && current == null)
+                    resaults.Add(des);
+
+                if (IsTheSameSelector(element, des))
+                {
+                    // father
+                    FindElements(element.Parent, des.Parent, resaults);
+                }
+            }
+
+            return resaults.ToList();
+        }
+
+        public bool IsTheSameSelector(Selector selector, HTMLElement element)
+        {
+            if (selector == null && element == null)
+                return true;
+
+            if (selector == null || element == null)
+                return false;
+
+            if (element.Name != selector.TagName)
+                return false;
+
+            if (!selector.Classes.All(c => element.Classes.Contains(c)))
+                return false;
+
+            if (element.Id != selector.Id)
+                return false;
+
+            return true;
+        }
     }
 }
+// The last space start the current selector
+//"div #mydiv .class-name”
