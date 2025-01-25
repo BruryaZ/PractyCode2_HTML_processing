@@ -3,6 +3,7 @@ using PROJECT2_HTMP_processing.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -72,44 +73,60 @@ namespace PROJECT2_HTMP_processing.Entities
             }
         }
 
-        public List<HTMLElement> FindElements(Selector element, HTMLElement current, HashSet<HTMLElement> resaults)
+        public List<HTMLElement> FindElements(Selector element, HTMLElement current, HashSet<HTMLElement> results)
         {
-            var descendants = current.Descendants().ToList();
-            foreach (var des in descendants)
-            {
-                if(element == null && current == null)
-                    resaults.Add(des);
+            if (current == null && element != null)
+                return null;
 
-                if (IsTheSameSelector(element, des))
+            if (element == null)
+                return results.ToList();
+
+            if (IsTheSameSelector(element, current))
+            {
+                foreach (var des in current.Children)
                 {
-                    // father
-                    FindElements(element.Parent, des.Parent, resaults);
+                    if (FindElements(element, des, results) != null)
+                    {
+                        results.Add(current);
+                        break;
+                    }
                 }
+
+                if(current.Children.Count == 0)
+                    results.Add(current);
             }
 
-            return resaults.ToList();
+            foreach (var des in current.Children)
+            {
+                FindElements(element, des, results);
+            }
+
+            return results.ToList();
         }
 
         public bool IsTheSameSelector(Selector selector, HTMLElement element)
         {
+            if (element == null)
+                return true;
+
             if (selector == null && element == null)
                 return true;
 
             if (selector == null || element == null)
                 return false;
 
-            if (element.Name != selector.TagName)
+            if (selector.TagName != null)
+                if (element.Name == null || element.Name != selector.TagName)
+                    return false;
+
+            if (selector.Classes.Count > 0 && !selector.Classes.All(c => element.Classes.Contains(c)))
                 return false;
 
-            if (!selector.Classes.All(c => element.Classes.Contains(c)))
-                return false;
-
-            if (element.Id != selector.Id)
-                return false;
+            if (selector.Id != null)
+                if (element.Id == null || element.Id != selector.Id)
+                    return false;
 
             return true;
         }
     }
 }
-// The last space start the current selector
-//"div #mydiv .class-name”

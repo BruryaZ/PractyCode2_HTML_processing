@@ -5,17 +5,11 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
-static async Task<string> Load(string url)
-{
-    HttpClient client = new HttpClient();
-    var response = await client.GetAsync(url);
-    var html = await response.Content.ReadAsStringAsync();
-    return html;
-}
-
 //var html = await Load("https://learn.malkabruk.co.il/practicode");
+//var html = await Load("view-source:chrome://new-tab-page/");
+var html = await Load("https://www.youtube.com/watch?v=KqAF4TCEXbI");
 //var html = await Load("https://www.youtube.com/watch?v=KqAF4TCEXbI");
-var html = await Load("https://forum.netfree.link/category/1/%D7%94%D7%9B%D7%A8%D7%96%D7%95%D7%AA");
+//var html = await Load("https://forum.netfree.link/category/1/%D7%94%D7%9B%D7%A8%D7%96%D7%95%D7%AA");
 
 // filter the spaces
 var cleanHTML = new Regex("\\s").Replace(html, " ");
@@ -56,7 +50,7 @@ foreach (string line in HTMLLST)
     tagName = GetFirstWord(line);
 
     // close tag
-    if (tagName.StartsWith('/'))
+    if (currentElement != null && tagName.StartsWith('/'))
     {
         currentElement = currentElement.Parent;
     }
@@ -80,7 +74,19 @@ foreach (string line in HTMLLST)
 root.Name = "!DOCTYPE html";
 PrintHtmlAsDocument(root);
 
-// auxilary function 
+// Check FindElement
+var selector = Selector.QueryToSelector("head link");
+
+var results = new HashSet<HTMLElement>();
+
+var foundElements = root.FindElements(selector, root, results);
+Console.WriteLine("resaults: ");
+foreach (var element in foundElements)
+{
+    Console.WriteLine(element.Name);
+}
+
+// Auxilary function 
 static string GetFirstWord(string str)
 {
     // פיצול המחרוזת לרשימה של מילים
@@ -88,31 +94,6 @@ static string GetFirstWord(string str)
 
     // החזרת המילה הראשונה
     return words.Length > 0 ? words[0] : string.Empty;
-}
-static HTMLElement FullFields(string HTMLline, HTMLElement element)
-{
-    var matches = new Regex("([^\\s]*?)=\"(.*?)\"").Matches(HTMLline);
-    List<string> attributes = new List<string>();
-
-    foreach (Match match in matches)
-    {
-        // Add the matched attribute to the list
-        if (match.Success)
-        {
-            if (match.Value.IndexOf("class") != -1)
-                foreach (var cl in match.Groups[0].Value.Split(' '))
-                    element.Classes.Add(cl);
-
-            else if (match.Value.IndexOf("id") != -1)
-                element.Id = match.Value;
-            
-            else
-                attributes.Add(match.Value);
-        }
-    }
-
-    element.Attributes = attributes;
-    return element;
 }
 void PrintHtmlAsDocument(HTMLElement element, int depth = 0)
 {
@@ -161,13 +142,45 @@ void PrintHtmlAsDocument(HTMLElement element, int depth = 0)
         Console.WriteLine($"{indentation}</{element.Name}>");
     }
 }
-
-// פירוק השאילתא לא עובדת טוב
-var selector = Selector.QueryToSelector("head title");
-var results = new HashSet<HTMLElement>();
-var foundElements = root.FindElements(selector, root, results);
-Console.WriteLine("resaults: ");
-foreach (var element in foundElements)
+static HTMLElement FullFields(string HTMLline, HTMLElement element)
 {
-    Console.WriteLine(element.ToString());
+    var matches = new Regex("([^\\s]*?)=\"(.*?)\"").Matches(HTMLline);
+    List<string> attributes = new List<string>();
+
+    foreach (Match match in matches)
+    {
+        // Add the matched attribute to the list
+        if (match.Success)
+        {
+            string attributeName = match.Groups[1].Value; // Get the attribute name
+            string attributeValue = match.Groups[2].Value; // Get the attribute value
+
+            if (attributeName == "class")
+            {
+                // Split the class values and add them to the element's Classes
+                foreach (var cl in attributeValue.Split(' '))
+                {
+                    element.Classes.Add(cl);
+                }
+            }
+            else if (attributeName == "id")
+            {
+                element.Id = attributeValue; // Set the element's Id
+            }
+            else
+            {
+                attributes.Add(match.Value); // Add other attributes
+            }
+        }
+    }
+
+    element.Attributes = attributes;
+    return element;
+}
+static async Task<string> Load(string url)
+{
+    HttpClient client = new HttpClient();
+    var response = await client.GetAsync(url);
+    var html = await response.Content.ReadAsStringAsync();
+    return html;
 }

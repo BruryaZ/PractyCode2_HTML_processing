@@ -54,13 +54,15 @@ namespace PROJECT2_HTMP_processing.Models
                         tmp.Classes.Add(s2.Substring(1));
                     }
                 }
-            }
-            current.Child = tmp;
-            tmp.Parent = current;
-            current = current.Child;
-            return root;
-        }
 
+                current.Child = tmp;
+                tmp.Parent = current;
+                current = current.Child;
+            }
+
+            root.Child.Parent = null;
+            return root.Child;
+        }
         static List<string> SeparateString(string input)
         {
             List<string> result = new List<string>();
