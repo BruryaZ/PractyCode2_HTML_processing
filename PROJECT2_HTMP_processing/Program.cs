@@ -5,11 +5,10 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
-//var html = await Load("https://learn.malkabruk.co.il/practicode");
-//var html = await Load("view-source:chrome://new-tab-page/");
-var html = await Load("https://www.youtube.com/watch?v=KqAF4TCEXbI");
-//var html = await Load("https://www.youtube.com/watch?v=KqAF4TCEXbI");
-//var html = await Load("https://forum.netfree.link/category/1/%D7%94%D7%9B%D7%A8%D7%96%D7%95%D7%AA");
+// ממשק לטעינת HTML מדף והמרתו לאובייקטים בקוד
+Console.WriteLine("Enter your URL: ");
+string url = Console.ReadLine();
+var html = await Load(url);//https://www.youtube.com/watch?v=KqAF4TCEXbI
 
 // filter the spaces
 var cleanHTML = new Regex("\\s").Replace(html, " ");
